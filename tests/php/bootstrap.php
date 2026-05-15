@@ -34,6 +34,26 @@ if (!class_exists('OC\\User\\NoUserException')) {
     eval('namespace OC\\User; class NoUserException extends \\Exception {}');
 }
 
+// OCP\Server::get() and OCP\Util::callRegister() dereference the global
+// \OC::$server container. Outside a running Nextcloud instance the class
+// is missing entirely, which breaks every test that exercises code paths
+// touching those statics. Install a permissive null-object container so
+// arbitrary chained calls return a sentinel token rather than fatalling.
+if (!class_exists('OC')) {
+    eval('class OC { public static $server; }');
+    \OC::$server = new class {
+        public function get(string $serviceName): object
+        {
+            return new class {
+                public function __call(string $name, array $args)
+                {
+                    return $name === 'getEncryptedValue' ? 'phpunit-stub-token' : $this;
+                }
+            };
+        }
+    };
+}
+
 // Stub the OCA\Viewer\Event\LoadViewer class so PHPUnit-level tests can
 // reference Application::register() without the viewer app installed.
 if (!class_exists(\OCA\Viewer\Event\LoadViewer::class)) {

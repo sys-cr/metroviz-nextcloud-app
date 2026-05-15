@@ -16,7 +16,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "OCA\\MetroViz\\Tests\\": "tests/php/"
+            "OCA\\MetroViz\\Tests\\": "tests/php/",
+            "OCP\\": "vendor/nextcloud/ocp/OCP/",
+            "OC\\": "vendor/nextcloud/ocp/OC/"
         }
     },
     "require": {

@@ -40,9 +40,9 @@ class PageController extends Controller
         }
         try {
             $userFolder = $this->rootFolder->getUserFolder($user->getUID());
-            // getById() returns an array (Node[]) — works across NC 26..30.
-            // Newer NC has getFirstNodeById() but we keep the broader API
-            // so the same code runs on every supported NC.
+            // getById() returns an array (Node[]) — works across NC 28..32.
+            // Newer NC also has getFirstNodeById() but we keep the broader
+            // API so the same code runs on every supported NC.
             $nodes = $userFolder->getById((int)$fileid);
             if (empty($nodes)) {
                 return '';

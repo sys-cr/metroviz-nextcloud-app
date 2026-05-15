@@ -55,7 +55,7 @@ The app registers itself as a top navigation entry (`#app-metroviz`) and as a fi
 
 | Layer | Technology | Where |
 |---|---|---|
-| Delivery | PHP 8.1, Nextcloud App Framework, **`OCP\`** only | `lib/Controller/PageController.php` |
+| Delivery | PHP 8.3, Nextcloud App Framework, **`OCP\`** only | `lib/Controller/PageController.php` |
 | Template | Plain PHP + Alpine.js bindings | `templates/viewer.php` |
 | State | Alpine.js 3.13 + Alpine `$store` | `js/metroviz/app.js` |
 | Render | D3.js v7 (SVG metro map) | `js/metroviz/metro-renderer.js` |

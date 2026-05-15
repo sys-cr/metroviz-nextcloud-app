@@ -21,8 +21,8 @@ and the file-viewer registration. Both projects are MIT-licensed.
 | App ID | `metroviz` |
 | App name | MetroViz |
 | Category | `files` |
-| Supported Nextcloud | **26 – 30** (tested on 30) |
-| Required PHP | **≥ 8.1** |
+| Supported Nextcloud | **28 – 32** (tested on 30) |
+| Required PHP | **≥ 8.3** |
 | Database tables | **none** (`.metro` files live in user's NC Files) |
 | External services | **none** (no CDN, no analytics, no telemetry) |
 | Background jobs | **none** |

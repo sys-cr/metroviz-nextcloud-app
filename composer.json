@@ -24,8 +24,11 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
+        "nextcloud/ocp": "dev-master",
         "phpunit/phpunit": "^9.6"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "scripts": {
         "test:php": "phpunit -c phpunit.xml.dist",
         "fix-style": "php-cs-fixer fix",

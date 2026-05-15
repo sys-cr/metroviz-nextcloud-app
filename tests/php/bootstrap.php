@@ -23,6 +23,17 @@ if (!file_exists($autoload)) {
 }
 require_once $autoload;
 
+// Some OCP interfaces (e.g. OCP\Files\IRootFolder) extend or reference
+// internal OC\* classes that are part of the Nextcloud server but not
+// shipped in the nextcloud/ocp package. Provide minimal stubs so the
+// autoloader can resolve them when PHPUnit builds mock objects.
+if (!interface_exists('OC\\Hooks\\Emitter')) {
+    eval('namespace OC\\Hooks; interface Emitter {}');
+}
+if (!class_exists('OC\\User\\NoUserException')) {
+    eval('namespace OC\\User; class NoUserException extends \\Exception {}');
+}
+
 // Stub the OCA\Viewer\Event\LoadViewer class so PHPUnit-level tests can
 // reference Application::register() without the viewer app installed.
 if (!class_exists(\OCA\Viewer\Event\LoadViewer::class)) {

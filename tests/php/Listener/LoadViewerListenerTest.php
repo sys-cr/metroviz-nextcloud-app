@@ -19,7 +19,6 @@ class LoadViewerListenerTest extends TestCase
     public function testHandleAcceptsAnEvent(): void
     {
         $listener = new LoadViewerListener();
-        $this->expectNotToPerformAssertions();
         // `Util::addScript` is a static call that fails outside of NC's
         // request scope — we don't actually invoke handle() here, we just
         // assert the class can be instantiated and exposes the contract.

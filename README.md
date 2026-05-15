@@ -50,7 +50,23 @@ PNG, PDF, JSON, and Markdown are one menu click away.
 
 No external services. No analytics. No CDN. All assets self-hosted.
 
-## Quick install (existing Nextcloud)
+## Install on your Nextcloud
+
+Two paths, both self-contained — no Node, no Composer, no build step on the server.
+
+**Download a release tarball** (recommended for production):
+
+```bash
+VERSION=0.3.1
+cd /tmp
+curl -L -O https://github.com/sys-cr/metroviz-nextcloud-app/releases/download/v${VERSION}/metroviz-${VERSION}.tar.gz
+cd /var/www/nextcloud/apps
+sudo -u www-data tar xzf /tmp/metroviz-${VERSION}.tar.gz
+sudo -u www-data php /var/www/nextcloud/occ app:enable metroviz
+sudo -u www-data php /var/www/nextcloud/occ maintenance:mimetype:update-db
+```
+
+**Clone the git repository** (recommended for tracking `main`):
 
 ```bash
 cd /var/www/nextcloud/apps
@@ -59,7 +75,7 @@ sudo -u www-data php /var/www/nextcloud/occ app:enable metroviz
 sudo -u www-data php /var/www/nextcloud/occ maintenance:mimetype:update-db
 ```
 
-Full step-by-step: [docs/admin/INSTALL.md](./docs/admin/INSTALL.md).
+Full step-by-step (verification, upgrading, troubleshooting): [docs/admin/INSTALL.md](./docs/admin/INSTALL.md).
 
 ## Documentation
 

@@ -1,0 +1,29 @@
+# Files and directories excluded from `git archive` output.
+# Used by the release workflow to build a runtime-only tarball that a
+# Nextcloud administrator can drop into `apps/` and enable directly.
+
+# Test, build and tooling artefacts
+/tests/                    export-ignore
+/.github/                  export-ignore
+/.storybook/               export-ignore
+/scripts/                  export-ignore
+/.gitignore                export-ignore
+/.gitattributes            export-ignore
+/.prettierrc.json          export-ignore
+/.prettierignore           export-ignore
+/.php-cs-fixer.dist.php    export-ignore
+/.tool-versions            export-ignore
+/.env.example              export-ignore
+/eslint.config.js          export-ignore
+/phpunit.xml.dist          export-ignore
+/vite.config.js            export-ignore
+/vitest.config.js          export-ignore
+/composer.json             export-ignore
+/composer.lock             export-ignore
+/package.json              export-ignore
+/package-lock.json         export-ignore
+/Makefile                  export-ignore
+/CONTRIBUTING.md           export-ignore
+
+# Developer-only docs (admin and user docs stay)
+/docs/dev/                 export-ignore

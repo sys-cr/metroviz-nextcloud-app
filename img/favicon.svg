@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="MetroViz">
+  <title>MetroViz</title>
+  <style>
+    /* Adapt to browser/system theme automatically. */
+    .mv-stroke { stroke: #1a1a1a; fill: #1a1a1a; }
+    @media (prefers-color-scheme: dark) {
+      .mv-stroke { stroke: #ffffff; fill: #ffffff; }
+    }
+  </style>
+  <path class="mv-stroke" d="M 2.5 19 L 8 19 L 16 5 L 21.5 5"
+        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle class="mv-stroke" cx="8" cy="19" r="2.2"/>
+  <circle class="mv-stroke" cx="16" cy="5" r="2.2"/>
+</svg>

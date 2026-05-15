@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PHPUnit configuration for MetroViz-NC.
+
+  Unit-only suite — runs against Composer autoload without bootstrapping a
+  full Nextcloud test instance. Integration tests live alongside under
+  `tests/php/Integration/` and are gated by NC's own test runner (CI Phase B).
+
+  Run locally:
+      composer install
+      vendor/bin/phpunit
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
+         bootstrap="tests/php/bootstrap.php"
+         colors="true"
+         beStrictAboutOutputDuringTests="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         executionOrder="random">
+    <testsuites>
+        <testsuite name="unit">
+            <directory>tests/php/Controller</directory>
+            <directory>tests/php/Listener</directory>
+        </testsuite>
+    </testsuites>
+    <coverage>
+        <include>
+            <directory suffix=".php">lib</directory>
+        </include>
+    </coverage>
+</phpunit>

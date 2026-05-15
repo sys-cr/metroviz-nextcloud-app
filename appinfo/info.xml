@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+  <id>metroviz</id>
+  <name>MetroViz</name>
+  <summary>Technologie-Roadmaps als Metro-Maps visualisieren</summary>
+  <description><![CDATA[
+    Nextcloud-native successor to MetroViz by Ralf Stockmann
+    (https://github.com/rstockm/Metroviz). MetroViz visualises technology
+    roadmaps as metro maps — lines are themes, stations are milestones.
+
+    The rendering core is the upstream's, integrated here with Nextcloud
+    Files: `.metro` files live in the user's NC home, double-clicking
+    one in the Files app opens the viewer fullscreen (via OCA\Viewer),
+    sharing flows through the standard NC share dialog, and storage is
+    pure WebDAV.
+
+    No external services, no analytics, no CDN. MIT-licensed, matching
+    the upstream's licence.
+  ]]></description>
+  <version>0.3.1</version>
+  <licence>MIT</licence>
+  <author mail="bodo.steffen@mailbox.org">Bodo Steffen</author>
+  <namespace>MetroViz</namespace>
+  <category>files</category>
+  <bugs>https://github.com/sys-cr/metroviz-nextcloud-app/issues</bugs>
+  <dependencies>
+    <nextcloud min-version="26" max-version="30"/>
+    <php min-version="8.1"/>
+    <!-- OCA\Viewer pattern: required for the file-viewer integration. -->
+    <app>viewer</app>
+  </dependencies>
+  <types>
+    <type>filesystem</type>
+  </types>
+  <!-- application/x-metroviz is the canonical MIME for .metro files.
+       Mapping from extension lives in appinfo/mimetypemapping.json. -->
+  <mimetypes>
+    <mimetype>application/x-metroviz</mimetype>
+  </mimetypes>
+  <navigations>
+    <navigation>
+      <name>MetroViz</name>
+      <route>metroviz.page.viewer</route>
+      <icon>metroviz-app.svg</icon>
+      <order>10</order>
+    </navigation>
+  </navigations>
+</info>

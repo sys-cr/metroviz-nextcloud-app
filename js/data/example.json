@@ -1,0 +1,459 @@
+{
+  "meta": {
+    "title": "Digital Independence Roadmap 2026",
+    "organization": "DI.DAY"
+  },
+  "timeline": {
+    "start": "2026-01-01",
+    "end": "2027-01"
+  },
+  "events": [
+    {
+      "id": "event-diday-start",
+      "label": "Kickoff DI.DAY 2026",
+      "date": "2026-01-25"
+    },
+    {
+      "id": "event-diday-summer",
+      "label": "Halbzeitbilanz",
+      "date": "2026-06-28"
+    },
+    {
+      "id": "event-diday-end",
+      "label": "Jahresabschluss 2026",
+      "date": "2026-12-27"
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone-comm",
+      "label": "Messenger",
+      "color": "#00A0E2",
+      "collapsed": false
+    },
+    {
+      "id": "zone-5nkit1",
+      "label": "Karten",
+      "color": "#FCCC0A",
+      "collapsed": false
+    },
+    {
+      "id": "zone-office",
+      "label": "Büro & System",
+      "color": "#66C028",
+      "collapsed": false
+    },
+    {
+      "id": "zone-social",
+      "label": "Social Media",
+      "color": "#9364CC",
+      "collapsed": false
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-wa",
+      "label": "WhatsApp",
+      "color": "#0064B0",
+      "zone": "zone-comm",
+      "stations": [
+        {
+          "id": "stat-wa-1",
+          "label": "Tägliche Nutzung",
+          "date": "2026-01-25",
+          "type": "existing",
+          "flipLabel": false
+        },
+        {
+          "id": "stat-wa-2",
+          "label": "Kontakte vorwarnen",
+          "date": "2026-03-29",
+          "type": "milestone"
+        },
+        {
+          "id": "stat-wa-3",
+          "label": "Finaler Wechsel",
+          "date": "2026-05-31",
+          "type": "transfer",
+          "transferTo": "stat-sig-3",
+          "description": "Siehe [Wechselrezept WhatsApp zu Signal](https://di.day/de/wechselrezepte).",
+          "tint": true
+        },
+        {
+          "id": "station-t8n7mu",
+          "label": "KiTa Chat :-(",
+          "date": "2026-12",
+          "type": "milestone"
+        }
+      ]
+    },
+    {
+      "id": "line-sig",
+      "label": "Signal",
+      "color": "#00A0E2",
+      "zone": "zone-comm",
+      "stations": [
+        {
+          "id": "stat-sig-1",
+          "label": "Signal installieren",
+          "date": "2026-02-22",
+          "type": "start",
+          "isStop": false,
+          "tint": true
+        },
+        {
+          "id": "stat-sig-2",
+          "label": "Gruppen parallel aufbauen",
+          "date": "2026-04-26",
+          "type": "milestone",
+          "relations": [
+            {
+              "kind": "dependsOn",
+              "target": "stat-wa-2",
+              "label": "Nach Vorwarnung"
+            }
+          ],
+          "flipLabel": true,
+          "tint": true,
+          "isStop": true
+        },
+        {
+          "id": "stat-sig-3",
+          "label": "Ausschließliche Nutzung",
+          "date": "2026-05-31",
+          "type": "transfer"
+        },
+        {
+          "id": "stat-sig-4",
+          "label": "Komplett umgezogen",
+          "date": "2026-07-26",
+          "type": "milestone",
+          "tint": false,
+          "isStop": false,
+          "flipLabel": false
+        },
+        {
+          "id": "station-sqg8ux",
+          "label": "Regelbetrieb",
+          "date": "2026-12",
+          "type": "terminus"
+        }
+      ]
+    },
+    {
+      "id": "line-gmaps",
+      "label": "Big-Tech-Karten",
+      "color": "#EE7623",
+      "zone": "zone-5nkit1",
+      "stations": [
+        {
+          "id": "stat-gmaps-1",
+          "label": "Google Maps / Apple Maps",
+          "date": "2026-01-25",
+          "type": "existing"
+        },
+        {
+          "id": "stat-gmaps-2",
+          "label": "Nur noch als Fallback",
+          "date": "2026-05-31",
+          "type": "milestone",
+          "tint": true
+        },
+        {
+          "id": "stat-gmaps-3",
+          "label": "Deinstallation / Deaktivierung",
+          "date": "2026-08-30",
+          "type": "transfer",
+          "transferTo": "stat-osm-3",
+          "description": "Siehe [Wechselrezept Big-Tech-Karten zu OpenStreetMap](https://di.day/de/wechselrezepte)."
+        }
+      ]
+    },
+    {
+      "id": "line-osm",
+      "label": "OpenStreetMap",
+      "color": "#FFD300",
+      "zone": "zone-5nkit1",
+      "stations": [
+        {
+          "id": "stat-osm-1",
+          "label": "Apps testen",
+          "date": "2026-03-29",
+          "type": "start",
+          "description": "(z.B. Organic Maps)",
+          "tint": true
+        },
+        {
+          "id": "stat-osm-2",
+          "label": "Erste Navigationen",
+          "date": "2026-05-31",
+          "type": "milestone",
+          "flipLabel": false,
+          "relations": [
+            {
+              "kind": "synchronizedWith",
+              "target": "stat-gmaps-2",
+              "label": "Schleichender Übergang"
+            }
+          ]
+        },
+        {
+          "id": "stat-osm-3",
+          "label": "Vollständiger Wechsel",
+          "date": "2026-08-30",
+          "type": "transfer"
+        },
+        {
+          "id": "stat-osm-4",
+          "label": "Regelbetrieb",
+          "date": "2026-12",
+          "type": "terminus",
+          "isStop": false
+        }
+      ]
+    },
+    {
+      "id": "line-ms",
+      "label": "Microsoft Office",
+      "color": "#007229",
+      "zone": "zone-office",
+      "stations": [
+        {
+          "id": "stat-ms-1",
+          "label": "MS Office 365 Abo",
+          "date": "2026-01-25",
+          "type": "existing"
+        },
+        {
+          "id": "stat-ms-2",
+          "label": "Vorlagen sichten",
+          "date": "2026-04-26",
+          "type": "milestone",
+          "tint": true
+        },
+        {
+          "id": "stat-ms-3",
+          "label": "Abo kündigen",
+          "date": "2026-07-26",
+          "type": "transfer",
+          "transferTo": "stat-libre-3",
+          "description": "Siehe [Wechselrezept Microsoft zu Libre Office & Co.](https://di.day/de/wechselrezepte)."
+        }
+      ]
+    },
+    {
+      "id": "line-libre",
+      "label": "LibreOffice",
+      "color": "#6CBE45",
+      "zone": "zone-office",
+      "stations": [
+        {
+          "id": "stat-libre-1",
+          "label": "Parallele Installation",
+          "date": "2026-02-22",
+          "type": "start",
+          "tint": true
+        },
+        {
+          "id": "stat-libre-2",
+          "label": "Vorlagen übertragen",
+          "date": "2026-04-26",
+          "type": "milestone",
+          "relations": [
+            {
+              "kind": "synchronizedWith",
+              "target": "stat-ms-2",
+              "label": "Migrationsphase"
+            }
+          ]
+        },
+        {
+          "id": "stat-libre-3",
+          "label": "Alleinige Nutzung",
+          "date": "2026-07-26",
+          "type": "transfer"
+        },
+        {
+          "id": "stat-libre-4",
+          "label": "Workflows etabliert",
+          "date": "2026-12",
+          "type": "terminus",
+          "tint": true
+        }
+      ]
+    },
+    {
+      "id": "line-win",
+      "label": "Windows",
+      "color": "#00AFAD",
+      "zone": "zone-office",
+      "stations": [
+        {
+          "id": "stat-win-1",
+          "label": "Windows 11",
+          "date": "2026-01-25",
+          "type": "existing",
+          "flipLabel": true
+        },
+        {
+          "id": "stat-win-2",
+          "label": "Backup 1",
+          "date": "2026-06-28",
+          "type": "milestone",
+          "flipLabel": true
+        },
+        {
+          "id": "stat-win-3",
+          "label": "Vollständiges Backup",
+          "date": "2026-09-27",
+          "type": "milestone",
+          "flipLabel": true
+        },
+        {
+          "id": "stat-win-4",
+          "label": "Platt machen",
+          "date": "2026-11-29",
+          "type": "transfer",
+          "transferTo": "stat-lin-3",
+          "description": "Siehe [Wechselrezept Windows zu Linux Mint](https://di.day/de/wechselrezepte)."
+        }
+      ]
+    },
+    {
+      "id": "line-lin",
+      "label": "Linux",
+      "color": "#76D0BD",
+      "zone": "zone-office",
+      "stations": [
+        {
+          "id": "stat-lin-1",
+          "label": "Live-USB Stick erstellen",
+          "date": "2026-07-26",
+          "type": "start",
+          "relations": [
+            {
+              "kind": "dependsOn",
+              "target": "stat-win-2",
+              "label": "Grunddaten gesichert"
+            }
+          ]
+        },
+        {
+          "id": "stat-lin-2",
+          "label": "Hardware im Live-Modus testen",
+          "date": "2026-08-30",
+          "type": "milestone",
+          "isStop": true,
+          "flipLabel": true
+        },
+        {
+          "id": "stat-lin-3",
+          "label": "Linux installieren",
+          "date": "2026-11-29",
+          "type": "transfer"
+        }
+      ]
+    },
+    {
+      "id": "line-x",
+      "label": "X (Twitter)",
+      "color": "#7B208B",
+      "zone": "zone-social",
+      "stations": [
+        {
+          "id": "stat-x-1",
+          "label": "Tägliche X-Nutzung",
+          "date": "2026-01-25",
+          "type": "existing"
+        },
+        {
+          "id": "stat-x-2",
+          "label": "Archiv anfordern",
+          "date": "2026-02-22",
+          "type": "milestone"
+        },
+        {
+          "id": "stat-x-3",
+          "label": "Account stilllegen & Verweis",
+          "date": "2026-04-26",
+          "type": "transfer",
+          "transferTo": "stat-mas-3",
+          "description": "Siehe [Wechselrezept X zu Mastodon](https://di.day/de/wechselrezepte/mastodon)."
+        }
+      ]
+    },
+    {
+      "id": "line-insta",
+      "label": "Instagram",
+      "color": "#9B0056",
+      "zone": "zone-social",
+      "stations": [
+        {
+          "id": "stat-insta-1",
+          "label": "Instagram Abo",
+          "date": "2026-01-25",
+          "type": "existing"
+        },
+        {
+          "id": "stat-insta-2",
+          "label": "Wechsel zu Pixelfed / Mastodon",
+          "date": "2026-06-28",
+          "type": "transfer",
+          "transferTo": "stat-mas-5",
+          "description": "Die Bilder der Walled Gardens ins freie Fediverse migrieren."
+        }
+      ]
+    },
+    {
+      "id": "line-mas",
+      "label": "Mastodon & Fediverse",
+      "color": "#9364CC",
+      "zone": "zone-social",
+      "stations": [
+        {
+          "id": "stat-mas-1",
+          "label": "Serverwahl (Instanz suchen)",
+          "date": "2026-02-22",
+          "type": "start",
+          "tint": true
+        },
+        {
+          "id": "stat-mas-2",
+          "label": "Konto erstellen",
+          "date": "2026-02-29",
+          "type": "milestone",
+          "isStop": true,
+          "flipLabel": true
+        },
+        {
+          "id": "stat-mas-3",
+          "label": "Alte X-Kontakte finden",
+          "date": "2026-04-26",
+          "type": "transfer"
+        },
+        {
+          "id": "stat-mas-4",
+          "label": "Vorstellung (#Neuhier)",
+          "date": "2026-05-31",
+          "type": "milestone",
+          "flipLabel": true
+        },
+        {
+          "id": "stat-mas-5",
+          "label": "Bilder aus Instagram übernehmen",
+          "date": "2026-06-28",
+          "type": "transfer",
+          "isStop": true
+        },
+        {
+          "id": "stat-mas-6",
+          "label": "Werbefreie Timeline",
+          "date": "2026-12",
+          "type": "terminus",
+          "tint": true,
+          "flipLabel": true
+        }
+      ]
+    }
+  ]
+}

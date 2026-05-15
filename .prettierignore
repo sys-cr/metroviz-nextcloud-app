@@ -1,0 +1,13 @@
+# Don't reformat vendored libraries — they're minified builds and any
+# diff against upstream would be noise in code review.
+js/vendor/
+
+# Upstream MetroViz fork — kept clean for future upstream PRs, so
+# Prettier is not allowed to touch them.
+js/metroviz/
+css/metroviz.css
+
+# Generated outputs
+node_modules/
+storybook-static/
+coverage/

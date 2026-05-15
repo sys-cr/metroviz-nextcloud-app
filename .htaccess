@@ -1,0 +1,21 @@
+# MetroViz-NC: short cache life for our JS modules.
+#
+# Nextcloud's root .htaccess sets `Cache-Control: max-age=15778463` (~6 months)
+# on every .js/.mjs response, which is fine for production but devastating
+# during development — edits to transitive modules (file-manager.js, etc.)
+# are stuck in the browser cache because their URLs don't change.
+#
+# We don't yet have a build step that produces content-hashed filenames
+# (planned post-MVP). Until then, this override switches our app's JS to
+# `no-cache, must-revalidate` so the browser sends conditional requests
+# on every load. NC's normal cache-busting on the inline `<script type="module">`
+# entry still works as expected; this just covers the static-import children.
+<FilesMatch "\.(js|mjs|css|svg)$">
+    # `always` is required to override NC's root .htaccess which uses
+    # `Header always set Cache-Control "max-age=15778463"` for js/css/svg files.
+    # Covers .js (ES modules), .mjs (modules), .css (theme overrides), .svg
+    # (app icons — NC's per-app version hash doesn't update on file edits,
+    # so without this our svg icon edits stay cached 6 months in browsers).
+    Header always unset Cache-Control
+    Header always set Cache-Control "no-cache, must-revalidate"
+</FilesMatch>

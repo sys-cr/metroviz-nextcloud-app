@@ -1,0 +1,1173 @@
+/*
+ * MetroViz-NC layout + theme overrides. Loaded AFTER metroviz.css so the
+ * NC-CSS-variable rules win specificity-wise. Two concerns:
+ *
+ *   1. Layout — re-anchor upstream's `body { display:flex; height:100vh }`
+ *      onto #metroviz-app, since the NC <body> belongs to NC's chrome.
+ *      `min-height: 0` on the flex chain fixes the Safari scroll bug on
+ *      .tab-content (flex items with overflow:auto need explicit min-height,
+ *      otherwise they grow to fit content instead of scrolling).
+ *   2. Theme — map upstream's hardcoded dark palette onto NC theme variables
+ *      so Light / Dark / High-Contrast modes follow NC automatically. The
+ *      metro-line palette stays untouched (visual identity).
+ */
+
+/* ────────────── 1. Layout anchoring ────────────── */
+
+/* Without this override, upstream's `body { background, color, ... }` rule
+ * grabs NC's <body> and tints the entire NC chrome (top-bar, app menu,
+ * sidebar) dark. Values mirror NC's own body rule in core/css/apps.css so
+ * the user's primary theme + wallpaper drive the top-bar like every other
+ * NC app. No !important needed — NC's #body-user rules already win. */
+body {
+    background-color: var(--color-background-plain, var(--color-main-background));
+    background-image: var(--image-background);
+    background-size: cover;
+    background-position: center;
+    color: var(--color-main-text);
+    font-family: var(--font-face, var(--font-family, sans-serif));
+}
+
+/* Same body-takeover problem as above, applied to the bare <header> selector
+ * that would otherwise paint NC's top-bar dark. We no longer render an
+ * upstream MetroViz <header id="header">; only NC's own one exists. */
+header {
+    background: transparent;
+    border-bottom: none;
+    padding: 0;
+}
+
+#metroviz-app .app-content-header,
+#metroviz-app .app-sidebar__header {
+    background-color: var(--color-main-background);
+    border-bottom: 1px solid var(--color-border);
+    padding: 8px 16px;
+}
+
+/* Outer 3-column NC-Pattern container. NC's <main id="content">
+ * is itself a flex row, so flex-grow:1 + width:100% are required to fill
+ * the available horizontal space. */
+#metroviz-app {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#metroviz-app * {
+    box-sizing: border-box;
+}
+
+#metroviz-app main,
+#metroviz-app #editor-container,
+#metroviz-app .tab-content {
+    min-height: 0;
+}
+
+#metroviz-app .tab-content {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ────────────── 2. Theme — map upstream palette onto NC variables ──────────────
+ *
+ * NC auto-switches its theme variables under `prefers-color-scheme` and the
+ * user's theme-app preference. Mapping our backgrounds/text/borders here
+ * makes Light / Dark / High-Contrast work without further effort.
+ *
+ *   --color-main-background       page bg
+ *   --color-main-text             body text
+ *   --color-background-dark       slightly recessed bg
+ *   --color-background-darker     input fields, accents
+ *   --color-background-hover      hover states
+ *   --color-border                dividers
+ *   --color-border-dark           strong dividers
+ *   --color-text-maxcontrast      low-importance text
+ *   --color-primary               NC accent (per-user themed)
+ *   --color-primary-element       button bg
+ *   --color-primary-element-text  button text
+ */
+
+#metroviz-app {
+    background-color: var(--color-main-background, #ffffff);
+    color: var(--color-main-text, #1a1a1a);
+    font-family: var(--font-face, var(--font-family, sans-serif));
+}
+
+#metroviz-app header,
+#metroviz-app #header {
+    background-color: var(--color-background-dark, #f5f5f5);
+    border-bottom: 1px solid var(--color-border, #e0e0e0);
+    color: var(--color-main-text, #1a1a1a);
+}
+
+#metroviz-app h1,
+#metroviz-app h2,
+#metroviz-app h3,
+#metroviz-app .editor-section-title {
+    color: var(--color-main-text, #1a1a1a);
+}
+
+#metroviz-app .site-footer {
+    background-color: var(--color-background-darker, #ececec);
+    color: var(--color-text-maxcontrast, #6b6b6b);
+    border-top: 1px solid var(--color-border, #e0e0e0);
+}
+
+#metroviz-app .site-footer-link {
+    color: var(--color-text-maxcontrast, #6b6b6b);
+}
+
+#metroviz-app .site-footer-link:hover {
+    color: var(--color-primary, #0078d4);
+}
+
+/* Editor sidebar */
+#metroviz-app #editor-container {
+    background-color: var(--color-background-dark, #f5f5f5);
+    border-right: 1px solid var(--color-border, #e0e0e0);
+    color: var(--color-main-text, #1a1a1a);
+}
+
+#metroviz-app .editor-tabs {
+    background-color: var(--color-background-darker, #ececec);
+    border-bottom: 1px solid var(--color-border, #e0e0e0);
+}
+
+/* Flat NC tab-bar look for the editor tabs. NC's global button styles round
+ * corners and add box-shadows; reset them so the only active indicator is
+ * the bottom border on .active. */
+#metroviz-app .editor-tabs button {
+    background: transparent;
+    color: var(--color-text-maxcontrast, #6b6b6b);
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 12px 16px;
+    font-weight: 500;
+}
+
+#metroviz-app .editor-tabs button:hover:not(.active) {
+    color: var(--color-main-text, #1a1a1a);
+    background-color: var(--color-background-hover, rgba(0, 0, 0, 0.04));
+    border-color: transparent;
+    border-bottom-color: transparent;
+}
+
+#metroviz-app .editor-tabs button.active {
+    /* Text sits on top of `.editor-tabs { background: --color-background-
+     * darker }` (≈ #ececec). `--color-primary` (#0078d4) gives only 3.83:1
+     * there — below AA. Use the darker `--color-primary-element` variant
+     * for the text (4.91:1 on #ececec); the indicator bottom-border keeps
+     * the brighter `--color-primary` for visual identity (a coloured 2 px
+     * line doesn't need to meet text contrast). */
+    color: var(--color-primary-element, #005a9c);
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid var(--color-primary, #0078d4);
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#metroviz-app .editor-tabs button:focus,
+#metroviz-app .editor-tabs button:focus-visible,
+#metroviz-app .editor-tabs button:active {
+    outline: none;
+    box-shadow: none;
+}
+
+#metroviz-app .editor-tabs button:focus-visible {
+    outline: 2px solid var(--color-primary, #0078d4);
+    outline-offset: -2px;
+    border-radius: 0;
+}
+
+/* Header toolbar buttons — subtle hover, NC-primary focus outline. */
+#metroviz-app .controls > button,
+#metroviz-app .controls .action-buttons-inner > button,
+#metroviz-app .controls > a,
+#metroviz-app .controls .action-buttons-inner > a {
+    background-color: transparent;
+    color: var(--color-main-text, #1a1a1a);
+    border: 1px solid transparent;
+    border-radius: var(--border-radius, 6px);
+    padding: 6px 10px;
+    cursor: pointer;
+    transition:
+        background-color 0.1s ease,
+        border-color 0.1s ease;
+}
+
+#metroviz-app .controls > button:hover,
+#metroviz-app .controls .action-buttons-inner > button:hover {
+    background-color: var(--color-background-hover, rgba(0, 0, 0, 0.04));
+}
+
+#metroviz-app .controls > button:focus-visible,
+#metroviz-app .controls .action-buttons-inner > button:focus-visible {
+    outline: 2px solid var(--color-primary, #0078d4);
+    outline-offset: 2px;
+}
+
+#metroviz-app .controls > button.active,
+#metroviz-app .controls .action-buttons-inner > button.btn-active,
+#metroviz-app .controls .action-buttons-inner > button.active {
+    background-color: var(--color-primary-light, rgba(0, 120, 212, 0.1));
+    color: var(--color-primary, #0078d4);
+}
+
+/* Form inputs — full NC-visual-match. */
+#metroviz-app input[type="text"],
+#metroviz-app input[type="search"],
+#metroviz-app input[type="date"],
+#metroviz-app input[type="number"],
+#metroviz-app input[type="url"],
+#metroviz-app select,
+#metroviz-app textarea {
+    background-color: var(--color-main-background, #ffffff);
+    color: var(--color-main-text, #1a1a1a);
+    border: 1px solid var(--color-border-dark, #cccccc);
+    border-radius: var(--border-radius, 6px);
+    padding: 6px 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    box-shadow: none;
+    transition:
+        border-color 0.12s ease,
+        box-shadow 0.12s ease;
+}
+
+#metroviz-app input::placeholder,
+#metroviz-app textarea::placeholder {
+    color: var(--color-text-maxcontrast, #6b6b6b);
+    opacity: 1;
+}
+
+#metroviz-app input[type="text"]:hover,
+#metroviz-app input[type="search"]:hover,
+#metroviz-app input[type="date"]:hover,
+#metroviz-app input[type="number"]:hover,
+#metroviz-app input[type="url"]:hover,
+#metroviz-app select:hover,
+#metroviz-app textarea:hover {
+    border-color: var(--color-primary-element, var(--color-primary, #0078d4));
+}
+
+#metroviz-app input[type="text"]:focus,
+#metroviz-app input[type="text"]:focus-visible,
+#metroviz-app input[type="search"]:focus,
+#metroviz-app input[type="search"]:focus-visible,
+#metroviz-app input[type="date"]:focus,
+#metroviz-app input[type="date"]:focus-visible,
+#metroviz-app input[type="number"]:focus,
+#metroviz-app input[type="url"]:focus,
+#metroviz-app select:focus,
+#metroviz-app select:focus-visible,
+#metroviz-app textarea:focus,
+#metroviz-app textarea:focus-visible {
+    outline: 2px solid var(--color-primary, #0078d4);
+    outline-offset: -1px;
+    border-color: var(--color-primary, #0078d4);
+    box-shadow: 0 0 0 1px var(--color-primary, #0078d4);
+}
+
+#metroviz-app input[disabled],
+#metroviz-app textarea[disabled],
+#metroviz-app select[disabled] {
+    background-color: var(--color-background-dark, #f5f5f5);
+    color: var(--color-text-maxcontrast, #6b6b6b);
+    cursor: not-allowed;
+}
+
+#metroviz-app input[type="checkbox"] {
+    accent-color: var(--color-primary, #0078d4);
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    cursor: pointer;
+}
+
+/* Map canvas backdrop */
+#metroviz-app #metroviz-container {
+    background-color: var(--color-main-background, #ffffff);
+}
+
+/* Dividers in the toolbar */
+#metroviz-app .header-divider {
+    background-color: var(--color-border, #e0e0e0);
+}
+
+/* Status: language select */
+#metroviz-app .lang-select {
+    background-color: transparent;
+    color: var(--color-main-text, #1a1a1a);
+    border: 1px solid var(--color-border, #e0e0e0);
+}
+
+/* Selected/active state for editor list items (events, lines, etc.) */
+#metroviz-app .editor-item:hover {
+    background-color: var(--color-background-hover, rgba(0, 0, 0, 0.04));
+}
+
+/* Defensive: neutralise the legacy MetroViz `app-modal-*` overlays in case
+ * any stray references survived the migration to OC.dialogs.*. */
+#metroviz-app .app-modal-backdrop:not([x-show="true"]) {
+    display: none;
+}
+
+/* ────────────── 2b. Editor cards (line / station / event / zone) ──────────────
+ * Upstream hardcodes #252526 / #1e1e1e / #333 / #ddd here; remap onto NC
+ * variables so the editor sidebar follows Light / Dark / HC. */
+
+#metroviz-app .station-card,
+#metroviz-app .line-card,
+#metroviz-app .zone-card,
+#metroviz-app .event-card {
+    background: var(--color-main-background, #ffffff);
+    border: 1px solid var(--color-border, #d0d0d0);
+    border-radius: var(--border-radius-large, 8px);
+    color: var(--color-main-text, #1a1a1a);
+    padding: 12px;
+    margin-bottom: 8px;
+    transition:
+        border-color 0.12s ease,
+        box-shadow 0.12s ease;
+}
+
+#metroviz-app .station-card:hover,
+#metroviz-app .line-card:hover,
+#metroviz-app .zone-card:hover,
+#metroviz-app .event-card:hover {
+    border-color: var(--color-primary-element, var(--color-primary, #0078d4));
+}
+
+/* Phase D polish: when a card has focus inside (e.g. an input gets focus
+ * via Tab), highlight the whole card so users can locate context fast. */
+#metroviz-app .station-card:focus-within,
+#metroviz-app .line-card:focus-within,
+#metroviz-app .zone-card:focus-within,
+#metroviz-app .event-card:focus-within {
+    border-color: var(--color-primary, #0078d4);
+    box-shadow: 0 0 0 1px var(--color-primary, #0078d4);
+}
+
+#metroviz-app .station-card::before {
+    background: var(--color-main-background, #ffffff);
+}
+
+#metroviz-app .stations-container,
+#metroviz-app .zone-content,
+#metroviz-app .line-content,
+#metroviz-app .event-content {
+    border-top-color: var(--color-border, #d0d0d0);
+}
+
+#metroviz-app .zone-title,
+#metroviz-app .line-title,
+#metroviz-app .event-title,
+#metroviz-app .station-title {
+    color: var(--color-main-text, #1a1a1a);
+}
+
+#metroviz-app .btn-small {
+    background: var(--color-background-darker, #ececec);
+    color: var(--color-main-text, #1a1a1a);
+    border: 1px solid var(--color-border, #d0d0d0);
+    border-radius: var(--border-radius, 6px);
+}
+
+#metroviz-app .btn-small:hover {
+    background: var(--color-background-hover, rgba(0, 0, 0, 0.06));
+}
+
+/* Labels above form fields */
+#metroviz-app label,
+#metroviz-app .field-label {
+    color: var(--color-text-maxcontrast, #6b6b6b);
+}
+
+/* The editor-section + editor-section-container blocks */
+#metroviz-app .editor-section {
+    background: transparent;
+    color: var(--color-main-text, #1a1a1a);
+}
+
+#metroviz-app .editor-section-container {
+    border-bottom: 1px solid var(--color-border, #d0d0d0);
+}
+
+/* Zone/Line headers are `<div role="button">` for keyboard accessibility
+ * (collapse/expand via Enter/Space). NC's button styles don't apply to
+ * divs, so the focus ring is painted explicitly. */
+#metroviz-app .zone-header-row[role="button"],
+#metroviz-app .line-header-row[role="button"] {
+    cursor: pointer;
+}
+#metroviz-app .zone-header-row[role="button"]:focus-visible,
+#metroviz-app .line-header-row[role="button"]:focus-visible {
+    outline: 2px solid var(--color-primary, #0078d4);
+    outline-offset: 2px;
+}
+
+/* ────────────── 2c. NC-Pattern layout (nav | content | sidebar) ──────────────
+ * Three siblings inside #metroviz-app replace upstream's monolithic
+ * header+main. The right sidebar toggles via `editorVisible`. */
+
+/* Left — App Navigation (file list). */
+#metroviz-app #app-navigation {
+    flex: 0 0 250px;
+    min-width: 250px;
+    width: 250px;
+    background-color: var(--color-main-background, #ffffff);
+    border-right: 1px solid var(--color-border, #d0d0d0);
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+#metroviz-app .app-navigation__list {
+    list-style: none;
+    margin: 0;
+    padding: 12px 8px;
+}
+
+#metroviz-app .app-navigation-new {
+    margin-bottom: 8px;
+}
+
+#metroviz-app .app-navigation-new__button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 12px;
+    background-color: var(--color-primary-element, var(--color-primary, #0078d4));
+    color: var(--color-primary-element-text, #ffffff);
+    border: none;
+    border-radius: var(--border-radius, 6px);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+#metroviz-app .app-navigation-new__button:hover {
+    background-color: var(--color-primary-element-hover, var(--color-primary, #005a9c));
+    filter: brightness(0.94);
+}
+
+#metroviz-app .app-navigation-new__button .app-navigation__icon {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+#metroviz-app .app-navigation-separator {
+    height: 1px;
+    background-color: var(--color-border, #d0d0d0);
+    margin: 8px 4px;
+    list-style: none;
+}
+
+#metroviz-app .app-navigation-entry {
+    list-style: none;
+    margin: 2px 0;
+}
+
+#metroviz-app .app-navigation-entry__link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 12px;
+    background: transparent;
+    color: var(--color-main-text, #1a1a1a);
+    border: none;
+    border-radius: var(--border-radius, 6px);
+    cursor: pointer;
+    font-size: 14px;
+    text-align: left;
+    overflow: hidden;
+}
+
+#metroviz-app .app-navigation-entry__link:hover {
+    background-color: var(--color-background-hover, rgba(0, 0, 0, 0.06));
+}
+
+#metroviz-app .app-navigation-entry__link:focus-visible {
+    outline: 2px solid var(--color-primary, #0078d4);
+    outline-offset: -2px;
+}
+
+#metroviz-app .app-navigation-entry--active .app-navigation-entry__link {
+    background-color: var(--color-primary-light, rgba(0, 120, 212, 0.12));
+    /* WCAG 2.2 AA needs 4.5:1. Plain `--color-primary` (#0078d4) on the
+     * tinted-primary background sits at 3.85:1. `--color-primary-element`
+     * is the darker, button-grade variant NC defines for foreground use,
+     * and the fallback `#005a9c` reaches 4.91:1. font-weight 600 nudges
+     * the perceived contrast further. */
+    color: var(--color-primary-element, #005a9c);
+    font-weight: 600;
+}
+
+#metroviz-app .app-navigation-entry__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1 1 auto;
+}
+
+#metroviz-app .app-navigation__icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+/* Center — App Content (slim header + map/markdown). */
+#metroviz-app #app-content {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: var(--color-main-background, #ffffff);
+}
+
+#metroviz-app .app-content-header {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 16px;
+    background-color: var(--color-main-background, #ffffff);
+    border-bottom: 1px solid var(--color-border, #d0d0d0);
+    min-height: 48px;
+    box-sizing: border-box;
+    /* NC adds its own narrow-viewport `#app-navigation-toggle` (a burger
+     * icon) inside `<main id="content">` — a sibling of our `#metroviz-app`
+     * that NC manages for its built-in app-navigation. We render our own
+     * title-trigger (Slack-style click-on-title) so NC's burger has no job
+     * here and just visually collides with our heading. The override below
+     * hides it, and the slight top-padding on the first header row keeps
+     * the heading clear of the top edge in case NC's burger leaks through
+     * (e.g. in older NC versions). */
+    padding-top: 12px;
+}
+
+/* Hide NC's built-in narrow-viewport nav-toggle. We provide our own
+ * via `.app-content-header__title-trigger` (live in the title bar). */
+#app-navigation-toggle,
+.app-navigation-toggle,
+.app-navigation-toggle-back {
+    display: none !important;
+}
+
+#metroviz-app .app-content-header__title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1 1 auto;
+    /* min-width:0 is mandatory so the child h2 actually truncates instead
+     * of forcing the toolbar off-screen. */
+}
+
+#metroviz-app .app-content-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-main-text, #1a1a1a);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Save-status pill — small text indicator next to the title. */
+#metroviz-app .save-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-text-maxcontrast, #6b6b6b);
+    padding: 2px 8px;
+    border-radius: 12px;
+    background-color: var(--color-background-darker, #f0f0f0);
+    transition:
+        opacity 0.15s ease,
+        background-color 0.15s ease;
+}
+
+#metroviz-app .save-status--idle {
+    opacity: 0;
+}
+/* Save-status pill colours — text must reach AA on the tinted background.
+ * Bright `--color-success/--color-warning/--color-primary` sat below 4.5:1
+ * in the axe-in-Chrome sweep; we use the darker "-text"/element
+ * variants (or AA-verified fallback hex) instead. */
+#metroviz-app .save-status--saved {
+    color: var(--color-success-text, #1f6d33);
+    background-color: var(--color-success-bg, rgba(70, 186, 97, 0.12));
+}
+#metroviz-app .save-status--dirty {
+    color: var(--color-warning-text, #815a00);
+    background-color: var(--color-warning-bg, rgba(163, 114, 0, 0.12));
+}
+#metroviz-app .save-status--saving {
+    color: var(--color-primary-element, #005a9c);
+    background-color: var(--color-primary-light, rgba(0, 120, 212, 0.1));
+}
+
+#metroviz-app .app-content-header__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 0 0 auto;
+}
+
+/* View switcher (Map / Text) segmented control. Override upstream's
+ * dark `.view-switcher` background + button rules so it follows NC. */
+#metroviz-app .view-switcher {
+    display: inline-flex;
+    background: transparent;
+    border: 1px solid var(--color-border, #d0d0d0);
+    border-radius: var(--border-radius, 6px);
+    overflow: hidden;
+    padding: 0;
+    height: auto;
+    gap: 0;
+    margin: 0 8px 0 0;
+}
+
+#metroviz-app .view-switcher button,
+#metroviz-app .view-switcher button:not(.active) {
+    background: transparent;
+    color: var(--color-main-text, #1a1a1a);
+    border: none;
+    border-radius: 0;
+    padding: 6px 12px;
+    margin: 0;
+    height: auto;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    box-shadow: none;
+}
+
+#metroviz-app .view-switcher button:hover:not(.active) {
+    background-color: var(--color-background-hover, rgba(0, 0, 0, 0.06));
+    color: var(--color-main-text, #1a1a1a);
+}
+
+#metroviz-app .view-switcher button.active {
+    background-color: var(--color-primary, #0078d4);
+    color: var(--color-primary-element-text, #ffffff);
+    border: none;
+    box-shadow: none;
+}
+
+#metroviz-app .view-switcher button svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+/* Header action buttons (Share, Edit, 3-dots) — NC-style icon buttons. */
+#metroviz-app .app-content-header__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    color: var(--color-main-text, #1a1a1a);
+    border: none;
+    padding: 6px 10px;
+    border-radius: var(--border-radius, 6px);
+    cursor: pointer;
+    font-size: 13px;
+}
+
+#metroviz-app .app-content-header__action:hover {
+    background-color: var(--color-background-hover, rgba(0, 0, 0, 0.06));
+}
+
+#metroviz-app .app-content-header__action:focus-visible {
+    outline: 2px solid var(--color-primary, #0078d4);
+    outline-offset: 2px;
+}
+
+#metroviz-app .app-content-header__action.active {
+    background-color: var(--color-primary-light, rgba(0, 120, 212, 0.12));
+    color: var(--color-primary, #0078d4);
+}
+
+#metroviz-app .app-content-header__action svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+#metroviz-app .action-menu-trigger {
+    padding: 6px;
+}
+
+/* Action menu dropdown */
+#metroviz-app .action-menu-wrapper {
+    position: relative;
+}
+
+/* Subtle pop-down animation matching NC's own dropdowns. */
+@keyframes mv-menu-popdown {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#metroviz-app .action-menu-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    min-width: 220px;
+    background-color: var(--color-main-background, #ffffff);
+    border: 1px solid var(--color-border, #d0d0d0);
+    border-radius: var(--border-radius-large, 8px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    list-style: none;
+    margin: 0;
+    padding: 4px 0;
+    z-index: 100;
+    animation: mv-menu-popdown 0.12s ease-out;
+    transform-origin: top right;
+}
+
+#metroviz-app .action-menu-list li {
+    list-style: none;
+}
+
+#metroviz-app .action-menu-list button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 12px;
+    background: transparent;
+    color: var(--color-main-text, #1a1a1a);
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    text-align: left;
+    /* NC pattern: focus-visible draws an inset outline, not a box-shadow ring. */
+    outline-offset: -2px;
+}
+
+#metroviz-app .action-menu-list button:hover {
+    background-color: var(--color-background-hover, rgba(0, 0, 0, 0.06));
+}
+
+#metroviz-app .action-menu-list button:focus-visible {
+    outline: 2px solid var(--color-primary, #0078d4);
+    background-color: var(--color-background-hover, rgba(0, 0, 0, 0.04));
+}
+
+#metroviz-app .action-menu-list button svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+#metroviz-app .action-menu-separator {
+    height: 1px;
+    background-color: var(--color-border, #d0d0d0);
+    margin: 4px 0;
+    list-style: none;
+}
+
+/* Export submenu inside action menu */
+#metroviz-app .action-menu-submenu {
+    position: relative;
+}
+
+#metroviz-app .action-menu-chevron {
+    margin-left: auto;
+    width: 14px !important;
+    height: 14px !important;
+}
+
+#metroviz-app .action-menu-submenu-list {
+    position: absolute;
+    top: 0;
+    right: 100%;
+    min-width: 180px;
+    background-color: var(--color-main-background, #ffffff);
+    border: 1px solid var(--color-border, #d0d0d0);
+    border-radius: var(--border-radius-large, 8px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    list-style: none;
+    margin: 0;
+    padding: 4px 0;
+    z-index: 101;
+}
+
+#metroviz-app .action-menu-submenu-list button {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    background: transparent;
+    color: var(--color-main-text, #1a1a1a);
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    text-align: left;
+}
+
+#metroviz-app .action-menu-submenu-list button:hover {
+    background-color: var(--color-background-hover, rgba(0, 0, 0, 0.06));
+}
+
+/* Map + Markdown containers fill the remaining vertical space inside
+ * app-content. min-height:0 is required so they actually shrink (see
+ * also the layout-anchoring section). */
+#metroviz-app #metroviz-container {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: var(--color-main-background, #ffffff);
+    padding: 0 1.5rem;
+}
+
+#metroviz-app #markdown-container {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    background-color: var(--color-background-dark, #f5f5f5);
+    color: var(--color-main-text, #1a1a1a);
+}
+
+/* Right — App Sidebar (Editor, toggleable). */
+#metroviz-app #app-sidebar {
+    flex: 0 0 440px;
+    min-width: 440px;
+    width: 440px;
+    background-color: var(--color-main-background, #ffffff);
+    border-left: 1px solid var(--color-border, #d0d0d0);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#metroviz-app .app-sidebar__header {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border, #d0d0d0);
+    background-color: var(--color-main-background, #ffffff);
+}
+
+#metroviz-app .app-sidebar__title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-main-text, #1a1a1a);
+}
+
+#metroviz-app .app-sidebar__close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: var(--border-radius, 6px);
+    color: var(--color-main-text, #1a1a1a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#metroviz-app .app-sidebar__close:hover {
+    background-color: var(--color-background-hover, rgba(0, 0, 0, 0.06));
+}
+
+#metroviz-app .app-sidebar__close svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+/* Editor container inside the sidebar — drop the upstream fixed width and
+ * border-right (the sidebar handles both) and let it fill the sidebar. */
+#metroviz-app #app-sidebar #editor-container {
+    width: auto;
+    border-right: none;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+/* Defensive: hide the legacy site-footer if it ever reappears in upstream. */
+#metroviz-app .site-footer {
+    display: none;
+}
+
+/* ────────────── 3. Responsive layout ──────────────
+ *
+ * Breakpoints (chosen for tablet ergonomics, not phones):
+ *
+ *   ≥ 1280 px   Desktop: 250 + content + 440 (defaults set above).
+ *   1024–1279   Compact desktop: 220 + content + 380.
+ *   768–1023    Tablet landscape / small laptop: both side-panels become
+ *               overlays so the map gets the full content width. Hamburger
+ *               toggle (`.app-content-header__nav-toggle`) opens the nav.
+ *   < 768 px    Tablet portrait / phone: overlays fill near-full width;
+ *               header buttons collapse to icon-only.
+ *
+ * The scrim is rendered above the content but below the overlay panels and
+ * only visible while ≥ one panel is open AND the viewport is < 1024 px. */
+
+/* Title-trigger — the title text + chevron act as a single nav-toggle on
+ * narrow viewports, plain heading on desktop. Default styling is heading-
+ * like; the narrow breakpoint adds the button affordance below. */
+#metroviz-app .app-content-header__title-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+    cursor: default;
+    min-width: 0;
+    text-align: left;
+    /* The trigger should not steal flex from the save-status pill. */
+    flex: 0 1 auto;
+}
+
+#metroviz-app .app-content-header__title-trigger .app-content-title {
+    /* Heading inside button — preserve appearance + truncation. */
+    min-width: 0;
+}
+
+/* Chevron is hidden on desktop (the trigger has no dropdown affordance). */
+#metroviz-app .app-content-header__title-chevron {
+    display: none;
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    color: var(--color-text-maxcontrast, #6b6b6b);
+    transition: transform 0.18s ease;
+    flex-shrink: 0;
+}
+
+/* The scrim. Display-toggling via x-show in the template, but we hide it
+ * on wide viewports unconditionally — no scrim needed in 3-column mode. */
+#metroviz-app .app-overlay-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    cursor: pointer;
+}
+
+/* Compact desktop — keep the 3-column layout but tighten widths. */
+@media (max-width: 1279px) and (min-width: 1024px) {
+    #metroviz-app #app-navigation {
+        flex: 0 0 220px;
+        min-width: 220px;
+        width: 220px;
+    }
+    #metroviz-app #app-sidebar {
+        flex: 0 0 380px;
+        min-width: 380px;
+        width: 380px;
+    }
+}
+
+/* Tablet + below: both side panels become overlays. */
+@media (max-width: 1023px) {
+    /* Title becomes the nav-toggle: cursor + hover + chevron appear. */
+    #metroviz-app .app-content-header__title-trigger {
+        cursor: pointer;
+        padding: 4px 8px;
+        margin-left: -8px;
+        border-radius: var(--border-radius, 6px);
+    }
+    #metroviz-app .app-content-header__title-trigger:hover {
+        background-color: var(--color-background-hover, rgba(0, 0, 0, 0.06));
+    }
+    #metroviz-app .app-content-header__title-trigger:focus-visible {
+        outline: 2px solid var(--color-primary, #0078d4);
+        outline-offset: 2px;
+    }
+    #metroviz-app .app-content-header__title-chevron {
+        display: inline-block;
+    }
+
+    /* Left navigation: slides in from the left, controlled by .--overlay-open. */
+    #metroviz-app #app-navigation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 1001;
+        flex: 0 0 auto;
+        width: min(300px, 85vw);
+        min-width: 0;
+        max-width: 320px;
+        transform: translateX(-100%);
+        transition: transform 0.22s ease;
+        box-shadow: 2px 0 12px rgba(0, 0, 0, 0.18);
+        border-right: 1px solid var(--color-border, #d0d0d0);
+    }
+    #metroviz-app #app-navigation.app-navigation--overlay-open {
+        transform: translateX(0);
+    }
+
+    /* Right editor sidebar: slides in from the right; visibility still
+     * driven by Alpine's x-show on editorVisible. */
+    #metroviz-app #app-sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1001;
+        flex: 0 0 auto;
+        width: min(440px, 92vw);
+        min-width: 0;
+        max-width: 480px;
+        box-shadow: -2px 0 12px rgba(0, 0, 0, 0.18);
+        border-left: 1px solid var(--color-border, #d0d0d0);
+    }
+
+    /* App-content now owns the full horizontal viewport. */
+    #metroviz-app #app-content {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: 100%;
+    }
+}
+
+/* Wide viewport — never show the scrim even if Alpine state requests it. */
+@media (min-width: 1024px) {
+    #metroviz-app .app-overlay-scrim {
+        display: none !important;
+    }
+}
+
+/* Tablet portrait + phone: collapse header button labels to icon-only and
+ * tighten paddings; the title may need an aggressive truncate. */
+@media (max-width: 767px) {
+    #metroviz-app .app-content-header {
+        padding: 6px 8px;
+        gap: 6px;
+        min-height: 44px;
+    }
+    #metroviz-app .app-content-header__action {
+        padding: 6px;
+    }
+    /* Hide the inline labels of header buttons (Share / Edit). The icon and
+     * the localized title attribute carry the meaning. */
+    #metroviz-app .app-content-header__action > span,
+    #metroviz-app .edit-toggle > span {
+        display: none;
+    }
+    /* The view-switcher labels are already hidden by upstream's 1080 px
+     * rule; reaffirm so we're not surprised by future upstream tweaks. */
+    #metroviz-app .view-switcher button > span {
+        display: none;
+    }
+    /* Save-status pill: show glyph only, drop the text. Status still meets
+     * the accessibility requirement because color + icon + tooltip carry the meaning. */
+    #metroviz-app .save-status > span > span {
+        display: none;
+    }
+    /* Overlay panels go near-full-screen on phone. */
+    #metroviz-app #app-navigation {
+        width: min(320px, 88vw);
+    }
+    #metroviz-app #app-sidebar {
+        width: 100vw;
+        max-width: 100vw;
+    }
+    /* Roomier touch target for the file-list entries on phone. */
+    #metroviz-app .app-navigation-entry__link {
+        padding: 12px;
+        font-size: 15px;
+    }
+}
+
+/* Action-menu dropdown — guard against overflowing the viewport on narrow
+ * screens. Above the breakpoint the dropdown is anchored top-right and the
+ * existing 220px min-width is fine. */
+@media (max-width: 480px) {
+    #metroviz-app .action-menu-list {
+        right: 4px;
+        left: auto;
+        min-width: 200px;
+        max-width: calc(100vw - 16px);
+    }
+    /* Push the export submenu downward instead of leftward to avoid
+     * scrolling off the left edge. */
+    #metroviz-app .action-menu-submenu-list {
+        position: static;
+        margin-top: 4px;
+        right: auto;
+        box-shadow: none;
+        border: 0;
+        padding-left: 16px;
+    }
+}
+
+/* ────────────── 4. High-contrast (prefers-contrast: more) ──────────────
+ *
+ * Every interactive element gains an explicit
+ * outline-style change (width or thickness) so the affordance doesn't
+ * depend on colour alone. NC's own HC theme reduces saturation
+ * which can collapse our subtle focus rings — widening the outline keeps
+ * focus visible without depending on theme contrast. */
+@media (prefers-contrast: more) {
+    #metroviz-app .controls > button,
+    #metroviz-app .controls .action-buttons-inner > button,
+    #metroviz-app .app-content-header__action,
+    #metroviz-app .action-menu-list button,
+    #metroviz-app .app-navigation-entry__link {
+        border-color: var(--color-border-dark, currentColor);
+    }
+
+    #metroviz-app *:focus-visible,
+    #metroviz-app .controls > button:focus-visible,
+    #metroviz-app .app-content-header__action:focus-visible,
+    #metroviz-app .app-navigation-entry__link:focus-visible,
+    #metroviz-app input:focus-visible,
+    #metroviz-app textarea:focus-visible,
+    #metroviz-app select:focus-visible {
+        outline-width: 3px;
+        outline-style: solid;
+        outline-offset: 2px;
+    }
+
+    /* Editor cards: keep colour border + add a visible focus-within ring. */
+    #metroviz-app .station-card:focus-within,
+    #metroviz-app .line-card:focus-within,
+    #metroviz-app .zone-card:focus-within,
+    #metroviz-app .event-card:focus-within {
+        box-shadow: 0 0 0 3px var(--color-primary, currentColor);
+    }
+}

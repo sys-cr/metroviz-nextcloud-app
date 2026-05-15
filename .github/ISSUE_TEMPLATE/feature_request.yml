@@ -1,0 +1,40 @@
+name: Feature request
+description: Suggest a new feature or improvement.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What user problem does this solve?
+      description: Describe the situation a user is in today and why the current behaviour doesn't serve them.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: How would you like MetroViz-NC to behave?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you thought about and why you ruled them out.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - UI / UX (something the user sees or interacts with)
+        - Storage / WebDAV
+        - File-viewer / NC integration
+        - Performance
+        - Accessibility (WCAG / SR / keyboard)
+        - Developer tooling / CI
+        - Other
+    validations:
+      required: true

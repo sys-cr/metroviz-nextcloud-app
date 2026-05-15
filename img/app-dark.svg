@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" role="img" aria-label="MetroViz">
+  <title>MetroViz</title>
+  <!-- Dark-theme variant: same shape as app.svg, but pinned to white fill so
+       it stays visible on dark backgrounds for code paths that don't use
+       currentColor (legacy NC themes, embedded contexts). -->
+  <path d="M 2.5 19 L 8 19 L 16 5 L 21.5 5"
+        stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="8" cy="19" r="2.2"/>
+  <circle cx="16" cy="5" r="2.2"/>
+</svg>

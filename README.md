@@ -40,6 +40,9 @@ Both projects are MIT-licensed.
 
 ---
 
+<img width="1343" height="949" alt="Bildschirmfoto 2026-05-15 um 17 35 08" src="https://github.com/user-attachments/assets/54ec2a34-9487-4868-b3df-ae29f5bcb35f" />
+
+---
 ## What it does
 
 MetroViz-NC turns `.metro` files into editable, shareable subway-style

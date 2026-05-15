@@ -4,8 +4,8 @@
 > natively in Nextcloud Files.
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
-![Nextcloud 26–30](https://img.shields.io/badge/nextcloud-26--30-blue)
-![PHP 8.1+](https://img.shields.io/badge/php-8.1+-blue)
+![Nextcloud 28–32](https://img.shields.io/badge/nextcloud-28--32-blue)
+![PHP 8.3+](https://img.shields.io/badge/php-8.3+-blue)
 ![Based on: rstockm/Metroviz](https://img.shields.io/badge/based%20on-rstockm%2FMetroviz-orange)
 
 ---

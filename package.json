@@ -19,14 +19,14 @@
     "@storybook/addon-a11y": "^8.2.0",
     "@storybook/addon-essentials": "^8.2.0",
     "@storybook/html-vite": "^8.2.0",
-    "@vitest/coverage-v8": "^1.6.0",
+    "@vitest/coverage-v8": "^4.1.8",
     "axe-core": "^4.11.4",
     "eslint": "^9.0.0",
     "globals": "^17.6.0",
     "jsdom": "^24.0.0",
     "prettier": "^3.3.0",
     "storybook": "^8.2.0",
-    "vitest": "^1.6.0"
+    "vitest": "^4.1.8"
   },
   "dependencies": {
     "alpinejs": "^3.13.10",
